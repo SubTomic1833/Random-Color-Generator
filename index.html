@@ -73,5 +73,121 @@
 <body onclick ="makeNewColor()">
     <p style="color:white;">Click anywhere on the screen or press Spacebar!</p>
     <br>
-    <div class="main-box" onclick="event.stopPropagation()"></div>
+    <div class="main-box" onclick="event.stopPropagation()">
+        <div class="color-text" id="nameText">Color Name</div>
+        <br>
+        <p>Click a value below to copy it:</p>
+        <div class="color-text" id="hexText" onclick="copyMe('#hexText')">#FFFFFF</div>
+        <div class="color-text" id="rgbText" onclick="copyMe('#rgbText')">rgb(255,255,255)</div>
+        <div class="color-text" id="hslText" onclick="copyMe('#hslText')">hsl(0,0%,100%)</div>
+        <br>
+        <button class="my-button" onclick="addFavorite()">Add to Favorites</button>
+    </div>
+
+    <div class="section-box" onclick="event.stopPropagation()">
+        <h3>History (Max 20)</h3>
+        <div id="historyContainer"></div>
+        <div class="clear-float"></div>
+    </div>
+    <div class="section-box" onclick="event.stopPropagation()">
+        <h3>Stats Table</h3>
+        <p>Total Discovered: <span id="statTotal">0</span></p>
+        <p>Brightest Color: <span id="statBrightest">N/A</span></p>
+        <p>Darkest Color: <span id="statDark">N/A</span></p>
+        <p>Most Saturated Color: <span id="statSat">N/A</span></p>
+    </div>
+
+    <div class="alert-toast" id="popupAlert">Copied!</div>
+    <script>
+        var currentHex ="#FFFFFF";
+        var currentRgb ="rgb(255,255,255)";
+        var currentHsl ="hsl(0,0%,100%)";
+        var currentName ="White";
+        var historyArray = [];
+        var favoritesArray =[];
+        var totalColorsCount=0;
+        var highestBrightness = -1;
+        var lowestBrightness = 999;
+        var highestSaturation = -1;
+        var brightestHex="N/A";
+        var darkestHex="N/A";
+        var saturatedHex="N/A";
+
+        if(localStorage.getItem("mySavedColors") !== null){
+            var savedString =localStorage.getItem("mySavedColors");
+            favoritesArray=JSON.parse(savedString);
+            drawFavorites();
+        }
+        function makeNewColor(){
+            var r=Math.floor(Math.random()*256);
+            var g=Math.floor(Math.random()*256);
+            var b=Math.floor(Math.random()*256);
+            var rHex=r.toString(16);
+            var gHex=g.toString(16);
+            var bHex=b.toString(16);
+            if(rHex.length===1){
+                rHex="0"+rHex;
+            }
+            if(gHex.length===1){
+                gHex="0"+gHex;
+            }
+            if(bHex.length===1){
+                bHex="0"+bHex;
+            }
+
+            currentHex ="#"+rHex.toUpperCase()+gHex.toUpperCase()+bHex.toUpperCase();
+            currentRgb="rgb(" + r + "," + g + "," + b + ")";
+
+            var rNorm = r/255;
+            var gNorm = g/255;
+            var bNorm = b/255;
+            var max=Math.max(rNorm,gNorm,bNorm);
+            var min=Math.min(rNorm,gNorm,bNorm);
+            var h=0;
+            var s=0;
+            var l=(max+min)/2;
+            if(max !== min){
+                var d=max-min;
+                if(l > 0.5){
+                    s=d/(2-max-min);
+                }else{
+                    s=d/(max+min);
+                }
+                if(max===rNorm){
+                    if(gNorm<rNorm){
+                        h=(gNorm-bNorm)/d+6;
+                    }else{
+                        h=(gNorm-bNorm)/d+0;
+                    }
+                }else if(max === gNorm){
+                    h=(bNorm-rNorm)/d+2;
+                }else if(max === bNorm){
+                    h=(rNorm-gNorm)/d+4;
+                }
+            }
+            h=h/6;
+
+            var finalH=Math.round(h*360);
+            var finalS=Math.round(s*100);
+            var finalL=Math.round(l*100);
+            currentHsl="hsl("+finalH+","+finalS+"%,"+finalL+"%)";
+
+            if(r>200 && g>200 && b>200){
+                currentName="White / Light Gray";
+            }else if(r<50 && g<50 && b<50){
+                currentName="Black / Dark Gray";
+            }else if(r>g && r>b){
+                currentName="Reddish Color";
+            }else if(g>r && g>b){
+                currentName="Greenish Color";
+            }else if(b>r && b>g){
+                currentName="Bluish Color";
+            }else{
+                currentName="Mixed Neutral Color";
+            }
+            
+            document.body.style.backgroundCOlor=currentHex;
+            
+        }
+    </script>
 </body>>
