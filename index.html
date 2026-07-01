@@ -68,6 +68,28 @@
             border-radius:5px;
             display:none;
         }
+        .favorite-wrapper{
+            position:relative;
+            display:inline-block;
+        }
+        .delete-x{
+            position:absolute;
+            top:-6px;
+            right:-6px;
+            width:16px;
+            height:16px;
+            background:red;
+            color:white;
+            font-size:12px;
+            border-radius:50%;
+            display:none;
+            justify-content:center;
+            cursor:pointer;
+            line-height:16px;
+        }
+        .favorite-wrapper:hover .delete-x{
+            display:flex;
+        }
     </style>
 </head>
 <body onclick ="makeNewColor()">
@@ -266,11 +288,19 @@
             container.innerHTML="";
             for(var i=0; i<favoritesArray.length; i++){
                 var colorHex=favoritesArray[i];
+                var wrapper=document.createElement("div");
+                wrapper.className="favorite-wrapper";
                 var chip=document.createElement("div");
                 chip.className="chip";
                 chip.style.backgroundColor=colorHex;
                 chip.setAttribute("onclick","applyFavorite('" + colorHex + "')");
-                container.appendChild(chip);
+                var del=document.createElement("div");
+                del.className="delete-x";
+                del.innerText="X";
+                del.setAttribute("onclick","deleteFavorite(event,'" + colorHex + "')");
+                wrapper.appendChild(chip);
+                wrapper.appendChild(del);
+                container.appendChild(wrapper);
             }
         }
         function applyFavorite(hex){
@@ -295,6 +325,18 @@
             setTimeout(function(){
                 alertBox.style.display="none";
             },2000);
+        }
+        function deleteFavorite(event,hex){
+            event.stopPropagation();
+            for(var i=0; i<favoritesArray.length; i++){
+                if(favoritesArray[i]===hex){
+                    favoritesArray.splice(i,1);
+                    break;
+                }
+            }
+            localStorage.setItem("mySavedColors", JSON.stringify(favoritesArray));
+            drawFavorites();
+            showPopup("Deleted favorite: "+hex);
         }
         window.onkeydown=function(event){
             if(event.code==="Space"){
