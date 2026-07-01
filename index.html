@@ -103,7 +103,7 @@
     </style>
 </head>
 <body onclick ="makeNewColor()">
-    <p style="color:white;">Click anywhere on the screen or press Spacebar!</p>
+    <p style="color:white;">Click anywhere on the screen to change colors!</p>
     <br>
     <div class="main-box" onclick="event.stopPropagation()">
         <div class="color-text" id="nameText">Color Name</div>
@@ -138,6 +138,9 @@
         <p>Use your current color to draw!</p>
         <button class="my-button" onclick="toggleEraser()" id="eraserButton">
             Eraser: OFF
+        </button>
+        <button class="my-button" onclick="savePainting()">
+            Save Painting
         </button>
         <br><br>
         <canvas id="paintCanvas" onclick="event.stopPropagation()"></canvas>
@@ -357,11 +360,13 @@
             drawFavorites();
             showPopup("Deleted favorite: "+hex);
         }
+        /*
         window.onkeydown=function(event){
             if(event.code==="Space"){
                 makeNewColor();
             }
         };
+        */
         function toggleEraser(){
             eraserMode=!eraserMode;
             var button=document.getElementById("eraserButton");
@@ -370,6 +375,13 @@
             }else{
                 button.innerText="Eraser: OFF";
             }
+        }
+        function savePainting(){
+            var link=document.createElement("a");
+            link.download="MyPainting.png";
+            link.href=canvas.toDataURL("image/png");
+            link.click();
+            showPopup("Painting saved!")
         }
         makeNewColor();
         var canvas, ctx, drawing = false;
