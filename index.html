@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random-Color-Generator</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body{
+            background-color:#2c3e50;
+            font-family: Arial, sans-serif;
+            text-align:center;
+            padding:50px;
+        }
+        .main-box{
+            background:black;
+            color:white;
+            width:400px;
+            margin:0 auto;
+            padding:20px;
+            border-radius:10px;
+            margin-bottom:20px;
+        }
+        .color-text{
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+        .my-buttom{
+            background-color:red;
+            color:white;
+            padding:10px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            font-size:16px;
+        }
+        .section-box{
+            background:black;
+            color:white;
+            width:400px;
+            margin:0 auto;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:15px;
+            text-align:left;
+        }
+        .chip{
+            width:30px;
+            height:30px;
+            border-radius:5px;
+            border:1px solid white;
+            display:inline-block;
+            margin:5px;
+            cursor:pointer;
+        }
+        .clear-float{
+            clear:both;
+        }
+        .alert-toast{
+            position:fixed;
+            bottom:20px;
+            left:50%;
+            transform:translateX(-50%);
+            background-color:#333;
+            color:white;
+            padding:10px;
+            border-radius:5px;
+            display:none;
+        }
+    </style>
+</head>
+<body onclick ="makeNewColor()">
+    <p style="color:white;">Click anywhere on the screen or press Spacebar!</p>
+    <br>
+    <div class="main-box" onclick="event.stopPropagation()"></div>
+</body>>
