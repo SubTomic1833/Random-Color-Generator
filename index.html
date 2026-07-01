@@ -217,7 +217,7 @@
             if(brightnessScore<lowestBrightness){
                 lowestBrightness=brightnessScore;
                 darkestHex=currentHex;
-                document.getElementById
+                document.getElementById("statDarkest").innerText=darkestHex;
             }
             if(finalS>highestSaturation){
                 highestSaturation=finalS;
@@ -228,5 +228,60 @@
                 alert("You discovered " +totalColorsCount+ " colors!");
             }
         }
+        function drawHistory(){
+            var container=document.getElementById("historyContainer");
+            container.innerHTML="";
+            for(var i=0; i<historyArray.length; i++){
+                var colorHex=historyArray[i];
+                var chip=document.createElement("div");
+                chip.className="chip";
+                chip.style.backgroundColor=colorHex;
+                chip.setAttribute("onclick","updateFromChip('" + colorHex + "')");
+                container.appendChild(chip);
+            }
+        }
+        function addFavorite(){
+            var alreadySaved=false;
+            for(var i=0; i<favoritesArray.length; i++){
+                if(favoritesArray[i]===currentHex){
+                    alreadySaved=true;
+                }
+            }
+            if(alreadySaved===false){
+                favoritesArray.push(currentHex);
+                localStorage.setItem("mySavedColors",JSON.stringify(favoritesArray));
+                drawFavorites();
+                showPopup("Saved to favorites!");
+            }else{
+                showPopup("Already in favorites!");
+            }
+        }
+        function drawFavorites(){
+            currentHex=hexCode;
+            document.body.style.background = hexCode;
+            document.getElementById("hexText").innerText=hexCode;
+            document.getElementById("rgbText").innerText= "";
+            document.getElementById("hslText").innerText= "";
+            document.getElementById("nameText").innerText= "";
+        }
+        function copyMe(elementId){
+            var textToCopy=document.querySelector(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy);
+            showPopup("Copied: " +textToCopy);
+        }
+        function showPopup(message){
+            var alertBox=document.getElementById("popupAlert");
+            alertBox.innerText=message;
+            alertBox.style.display="block";
+            setTimeout(function(){
+                alertBox.style.display="none";
+            },2000);
+        }
+        window.onkeydown=function(event){
+            if(event.code==="Space"){
+                makeNewColor();
+            }
+        };
+        makeNewColor();
     </script>
 </body>>
