@@ -186,8 +186,47 @@
                 currentName="Mixed Neutral Color";
             }
             
-            document.body.style.backgroundCOlor=currentHex;
-            
+            document.body.style.backgroundColor=currentHex;
+            document.getElementById("hexText").innerText=currentHex;
+            document.getElementById("rgbText").innerText=currentRgb;
+            document.getElementById("hslText").innerText=currentHsl;
+            document.getElementById("nameText").innerText=currentName;
+
+            var alreadyInHistory=false;
+            for(var i=0; i<historyArray.length;i++){
+                if(historyArray[i]===currentHex){
+                    alreadyInHistory=true;
+                }
+            }
+            if(alreadyInHistory===false){
+                historyArray.push(currentHex);
+                if(historyArray.length>20){
+                    historyArray.shift()
+                }
+                drawHistory();
+            }
+
+            totalColorsCount=totalColorsCount+1;
+            document.getElementById("statTotal").innerText=totalColorsCount;
+            var brightnessScore=(r*2)+(g*3)+b;
+            if(brightnessScore>highestBrightness){
+                highestBrightness=brightnessScore;
+                brightestHex=currentHex;
+                document.getElementById("statBrightest").innerText=brightestHex;
+            }
+            if(brightnessScore<lowestBrightness){
+                lowestBrightness=brightnessScore;
+                darkestHex=currentHex;
+                document.getElementById
+            }
+            if(finalS>highestSaturation){
+                highestSaturation=finalS;
+                saturatedHex=currentHex;
+                document.getElementById("statSat").innerText=saturatedHex;
+            }
+            if(totalColorsCount===100 || totalColorsCount===200 || totalColorsCount===300){
+                alert("You discovered " +totalColorsCount+ " colors!");
+            }
         }
     </script>
 </body>>
