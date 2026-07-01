@@ -90,6 +90,14 @@
         .favorite-wrapper:hover .delete-x{
             display:flex;
         }
+        #paintCanvas{
+            width:100%;
+            height:400px;
+            background:white;
+            border-radius:10px;
+            cursor:crosshair;
+            display:block;
+        }
     </style>
 </head>
 <body onclick ="makeNewColor()">
@@ -123,7 +131,11 @@
         <p>Darkest Color: <span id="statDark">N/A</span></p>
         <p>Most Saturated Color: <span id="statSat">N/A</span></p>
     </div>
-
+    <div class="section-box" onclick="event.stopPropagation()">
+        <h3>Paint Canvas</h3>
+        <p>Use your current color to draw!</p>
+        <canvas id="paintCanvas" onclick="event.stopPropagation()"></canvas>
+    </div>
     <div class="alert-toast" id="popupAlert">Copied!</div>
     <script>
         var currentHex ="#FFFFFF";
@@ -244,7 +256,7 @@
             if(brightnessScore<lowestBrightness){
                 lowestBrightness=brightnessScore;
                 darkestHex=currentHex;
-                document.getElementById("statDarkest").innerText=darkestHex;
+                document.getElementById("statDark").innerText=darkestHex;
             }
             if(finalS>highestSaturation){
                 highestSaturation=finalS;
@@ -344,5 +356,38 @@
             }
         };
         makeNewColor();
+        var canvas, ctx, drawing = false;
+        window.onload = function () {
+            canvas = document.getElementById("paintCanvas");
+            ctx = canvas.getContext("2d");
+            canvas.width = 400;
+            canvas.height = 400;
+            canvas.addEventListener("mousedown", function(e){
+                drawing = true;
+                var rect = canvas.getBoundingClientRect();
+                ctx.beginPath();
+                ctx.moveTo(
+                    e.clientX - rect.left,
+                    e.clientY - rect.top
+                );
+            });
+            canvas.addEventListener("mouseup", function(){
+                drawing = false;
+                ctx.beginPath();
+            });
+            canvas.addEventListener("mousemove", function(e){
+                if(!drawing) return;
+                var rect = canvas.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                ctx.lineWidth = 10;
+                ctx.lineCap = "round";
+                ctx.strokeStyle = currentHex;
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            });
+        };
     </script>
 </body>>
